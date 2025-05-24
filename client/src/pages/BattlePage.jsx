@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MonacoEditor from "@monaco-editor/react";
 import { Button } from "../components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Tabs, TabList, Tab, TabPanel } from "../components/ui/tabs";
 import { Tooltip } from "../components/ui/tooltip";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "../components/ui/dialog";
@@ -91,6 +91,7 @@ export default function BattlePage() {
     setVerdict("Wrong Answer");
     setTimerActive(false); // Stop timer on resign
     setResignDialogOpen(false);
+    navigate("/dashboard"); // Redirect to dashboard immediately
   };
   const handleExit = () => {
     setExitDialogOpen(false);
@@ -121,19 +122,10 @@ export default function BattlePage() {
         <ResizablePanel defaultSize={40} minSize={20} maxSize={70} className="md:w-1/2 w-full">
           <motion.div initial={{ x: -30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.3 }} className="h-full">
             <Card className="h-full bg-neutral-900/80">
-              <CardHeader>
-                <CardTitle>{mockProblem.title}</CardTitle>
-                <div className="flex gap-2 mt-1">
-                  <span className="text-xs px-2 py-0.5 rounded bg-purple-700/30 text-purple-300">{mockProblem.difficulty}</span>
-                  {mockProblem.tags.map((tag) => (
-                    <span key={tag} className="text-xs px-2 py-0.5 rounded bg-neutral-800 text-neutral-300">{tag}</span>
-                  ))}
-                </div>
-              </CardHeader>
               <CardContent>
                 <div className="prose prose-invert max-w-none text-white">
                   <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <span className="text-[#A594F9]">2942.</span> {mockProblem.title}
+                    <span className="text-[#A594F9]">P:</span> {mockProblem.title}
                   </h2>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs px-2 py-0.5 rounded bg-[#A594F9]/20 text-[#A594F9]">{mockProblem.difficulty}</span>
