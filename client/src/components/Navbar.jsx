@@ -17,17 +17,6 @@ import { LogoutButton } from "./LogoutButton";
 
 export const SlideTabsExample = () => {
   const navigate = useNavigate();
-  React.useEffect(() => {
-    if (window.location.pathname === '/dashboard') {
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = '';
-      };
-    }
-    if (window.location.pathname === '/leaderboard') {
-      document.body.style.overflow = '';
-    }
-  }, [window.location.pathname]);
   return (
     <div className="bg-[#101010] py-4 relative">
       <SlideTabs navigate={navigate} />

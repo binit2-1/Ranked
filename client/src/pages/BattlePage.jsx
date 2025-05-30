@@ -126,7 +126,7 @@ function BattlePage({ matchDetails }) {
   const formatTime = (s) => `${Math.floor(s/60)}:${(s%60).toString().padStart(2, "0")}`;
 
   return (
-    <div className="min-h-screen bg-[#101010] text-white flex flex-col">
+    <div className="min-h-screen bg-[#101010] text-white font-sans flex flex-col">
       {/* Top bar: Timer & Players */}
       <div className="flex justify-between items-center px-6 py-4 border-b border-fuchsia-700 bg-[#181022]">
         <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="flex items-center gap-4">

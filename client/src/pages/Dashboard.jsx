@@ -3,7 +3,7 @@ import { RevealBento } from "../components/Bento";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-[#101010] text-white">
+    <div className="relative min-h-screen bg-[#101010] text-white overflow-hidden">
       {/* Main Dashboard Content */}
       <main className="p-6 flex flex-col justify-center min-h-[80vh]">
         <RevealBento />
