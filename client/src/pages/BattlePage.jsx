@@ -9,8 +9,44 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../compone
 import ReactMarkdown from "react-markdown";
 import axios from "../lib/axios";
 import FindingMatchPage from "./FindingMatch";
+import { LuSwords } from "react-icons/lu";
+import { FaTrophy } from "react-icons/fa6";
 
 
+
+// ResultDialog component
+function ResultDialog({ open, onOpenChange, isWinner, yourTime, opponentTime, ratingChange, onExit }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="bg-[#181022] border-fuchsia-700 text-white">
+        <DialogHeader className="flex flex-col items-center justify-center text-center w-full">
+          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
+            {isWinner ? "Congratulations!" : "Battle Result"}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="text-center my-4">
+          <div className="text-3xl font-bold mb-2 flex items-center justify-center gap-2">
+            {isWinner ? (
+              <>
+                You Won! <FaTrophy className="inline text-yellow-400 mb-1" />
+              </>
+            ) : (
+              "You Lost"
+            )}
+          </div>
+          <div className="text-lg mb-2">Your Time: <span className="text-fuchsia-400 font-mono">{yourTime}s</span></div>
+          <div className="text-lg mb-2">Opponent's Time: <span className="text-purple-400 font-mono">{opponentTime}s</span></div>
+          <div className={`text-lg font-semibold ${ratingChange > 0 ? 'text-green-400' : 'text-red-400'}`}> 
+            {ratingChange > 0 ? `+${ratingChange} ELO` : `${ratingChange} ELO`} {isWinner ? 'gained' : 'lost'}
+          </div>
+        </div>
+        <DialogFooter>
+          <Button onClick={onExit} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white w-full">Exit to Dashboard</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 function BattlePage({ matchDetails }) {
   const navigate = useNavigate();
@@ -20,6 +56,10 @@ function BattlePage({ matchDetails }) {
   const [timer, setTimer] = useState(0); 
   const [timerActive, setTimerActive] = useState(true);
   const [resignDialogOpen, setResignDialogOpen] = useState(false);
+  const [resultDialogOpen, setResultDialogOpen] = useState(false);
+  const [opponentTime, setOpponentTime] = useState(null); // Simulated for demo
+  const [yourFinishTime, setYourFinishTime] = useState(null);
+  const [ratingChange, setRatingChange] = useState(0);
   const editorRef = useRef(null);
 
   const handleEditorDidMount = (editor) => {
@@ -34,11 +74,41 @@ function BattlePage({ matchDetails }) {
     return () => clearInterval(interval);
   }, [timerActive]);
 
+  // Simulate opponent finish time for demo (in real app, get from backend)
+  useEffect(() => {
+    if (opponentTime === null && yourFinishTime === null) {
+      setOpponentTime(Math.floor(Math.random() * 100) + 20);
+    }
+  }, [opponentTime, yourFinishTime]);
+
+  // Fetch rating change from backend when result dialog opens
+  useEffect(() => {
+    if (resultDialogOpen && yourFinishTime !== null && opponentTime !== null) {
+      // Simulate API call to backend for Glicko rating change
+      // Replace this with real API call in production
+      const fetchRatingChange = async () => {
+        try {
+          // Example: /api/glicko/calculate?winner=you&loser=opponent
+          // const res = await axios.post('/glicko/calculate', { winner: ..., loser: ... });
+          // setRatingChange(res.data.ratingChange);
+          // Simulate: +25 for win, -18 for loss
+          const isWinner = yourFinishTime < opponentTime;
+          setRatingChange(isWinner ? 25 : -18);
+        } catch (err) {
+          setRatingChange(0);
+        }
+      };
+      fetchRatingChange();
+    }
+  }, [resultDialogOpen, yourFinishTime, opponentTime]);
+
   const handleSubmit = () => {
-    console.log(editorRef.current.getValue());
+    const finishTime = timer;
+    setYourFinishTime(finishTime);
     setOutput("Test cases passed!\nAll outputs correct.");
     setVerdict("Accepted");
-    setTimerActive(false); 
+    setTimerActive(false);
+    setResultDialogOpen(true);
   };
   const handleResign = () => {
     setOutput("You resigned. Better luck next time!");
@@ -46,6 +116,10 @@ function BattlePage({ matchDetails }) {
     setTimerActive(false); 
   };
   const handleExit = () => {
+    navigate("/dashboard");
+  };
+  const handleResultDialogExit = () => {
+    setResultDialogOpen(false);
     navigate("/dashboard");
   };
 
@@ -58,13 +132,11 @@ function BattlePage({ matchDetails }) {
         <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="flex items-center gap-4">
           <span className="text-lg font-mono bg-black/60 px-3 py-1 rounded">⏰ {formatTime(timer)}</span>
         </motion.div>
-        <div className="flex-1 flex justify-center">
+        <div className="flex-1 flex justify-center items-center">
           <div className="flex items-center gap-8">
-            {matchDetails.players.map((p, i) => (
-              <motion.div key={i} initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: i * 0.1 }} className="flex flex-col items-center">
-                <span className="font-bold text-2xl">{p}</span>
-              </motion.div>
-            ))}
+            <span className="font-bold text-2xl">{matchDetails.players[0]}</span>
+            <LuSwords className="text-fuchsia-600 text-3xl mx-2" />
+            <span className="font-bold text-2xl">{matchDetails.players[1]}</span>
           </div>
         </div>
       </div>
@@ -103,34 +175,42 @@ function BattlePage({ matchDetails }) {
         {/* Right: Editor only, full height */}
         <ResizablePanel defaultSize={60} minSize={20} maxSize={90} className="md:w-1/2 w-full">
           <div className="flex flex-col h-full">
-            <div className="flex items-center gap-2 mb-2 justify-center w-full">
+            <div className="flex items-center gap-2 mb-2 w-full">
               <span className="bg-[#232136] border border-fuchsia-700 rounded px-4 py-2 text-base text-white min-w-[120px] font-mono text-center">Python</span>
-              {verdict && (
-                <span className={`ml-2 px-2 py-1 rounded text-md font-semibold ${verdict === "Accepted" ? "bg-green-700 text-green-200" : "bg-red-700 text-red-200"}`}>
+              {output && (
+                <span className={`ml-2 px-2 py-1 rounded text-xs font-semibold ${verdict === "Accepted" ? "bg-green-700 text-green-200" : "bg-red-700 text-red-200"}`}
+                  title={verdict === "Accepted" ? "You won! You solved the problem before your opponent. ELO will be gained." : "You lost. Opponent solved before you. ELO will be deducted."}
+                >
                   {verdict === "Accepted" ? "Accepted" : "Rejected"}
                 </span>
               )}
             </div>
-
-            <div className="flex gap-2 justify-end mb-4">
+            <div className="flex gap-2 justify-end mb-4 -mt-12">
               <Button onClick={handleSubmit} className="bg-fuchsia-600 text-white hover:bg-fuchsia-700 px-6 py-2 text-base font-semibold rounded-md">Submit</Button>
               <Dialog open={resignDialogOpen} onOpenChange={setResignDialogOpen}>
                 <DialogTrigger asChild>
                   <Button className="bg-slate-900 border border-red-500 text-red-500 cursor-pointer hover:bg-neutral-900 px-6 py-2 text-base font-semibold rounded-md">Resign</Button>
                 </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
+                <DialogContent className="bg-[#181022] border-fuchsia-700 text-white">
+                  <DialogHeader className="flex flex-col items-center justify-center text-center w-full">
                     <DialogTitle>Are you sure you want to resign?</DialogTitle>
                   </DialogHeader>
+                  <div className="text-center my-4">
+                    <span className="text-lg font-semibold text-red-400">You will lose 18 ELO if you resign.</span>
+                  </div>
                   <DialogFooter>
                     <Button
-                      onClick={handleResign}
+                      onClick={() => {
+                        handleResign();
+                        setResignDialogOpen(false);
+                        navigate("/dashboard");
+                      }}
                       className="bg-[#101010] text-white hover:bg-[#232323] border-none shadow-none"
                     >
                       Yes, Resign
                     </Button>
                     <DialogClose asChild>
-                      <Button className="bg-[#A594F9] text-white hover:bg-[#b3a0e6] border-none shadow-none">Cancel</Button>
+                      <Button className="bg-fuchsia-700 text-white hover:bg-fuchsia-600 border-none shadow-none">Cancel</Button>
                     </DialogClose>
                   </DialogFooter>
                 </DialogContent>
@@ -143,7 +223,6 @@ function BattlePage({ matchDetails }) {
                 language="python"
                 value={code}
                 theme="vs-dark"
-                onMount={handleEditorDidMount}
                 options={{
                   fontSize: 16,
                   minimap: { enabled: false },
@@ -153,6 +232,16 @@ function BattlePage({ matchDetails }) {
                 onChange={setCode}
               />
             </div>
+            {/* Result Dialog */}
+            <ResultDialog
+              open={resultDialogOpen}
+              onOpenChange={setResultDialogOpen}
+              isWinner={yourFinishTime !== null && opponentTime !== null && yourFinishTime < opponentTime}
+              yourTime={yourFinishTime}
+              opponentTime={opponentTime}
+              ratingChange={ratingChange}
+              onExit={handleResultDialogExit}
+            />
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>

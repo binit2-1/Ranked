@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { useAuth } from "../lib/useAuth"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
@@ -21,7 +20,6 @@ import axios from "../lib/axios"
 
 export default function LandingPage() {
   const { user } = useAuth()
-  const navigate = useNavigate()
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
   const [loginForm, setLoginForm] = useState({ email: "", password: "" })
@@ -34,10 +32,8 @@ export default function LandingPage() {
   const [loading, setLoading] = useState(false)
 
   React.useEffect(() => {
-    if (user) {
-      navigate("/dashboard", { replace: true })
-    }
-  }, [user, navigate])
+    // No routing from landing page
+  }, []);
 
   // Handlers for login/signup
   const handleLoginChange = (e) => setLoginForm({ ...loginForm, [e.target.name]: e.target.value })
@@ -50,13 +46,15 @@ export default function LandingPage() {
       const response = await axios.post(`/users/login`, {
         email: loginForm.email,
         password: loginForm.password,
-      })
+      }, { withCredentials: true })
       if (response.data.success) {
         showSuccess("Logged in successfully")
         setLoginForm({ email: "", password: "" })
+        // Store user in localStorage for persistence
+        localStorage.setItem('ranked_user', JSON.stringify(response.data.user))
         setTimeout(() => {
           setLoading(false)
-          navigate("/dashboard")
+          // Removed navigation
         }, 1000)
       }
       else {
@@ -152,12 +150,12 @@ export default function LandingPage() {
   const liveDays = useAnimatedNumber(7, 1.2, 1, 9)
 
   return (
-    <div className="min-h-screen bg-[#101010] text-white">
+    <div className="min-h-screen bg-[#101010] text-white font-sans" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
       {/* Header */}
       <header className="border-b border-gray-800 bg-[#101010]/95 backdrop-blur supports-[backdrop-filter]:bg-[#101010]/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-4xl font-bold bg-gradient-to-r from-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
+            <span className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-fuchsia-500 to-purple-500 bg-clip-text text-transparent tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif', letterSpacing: '-0.02em' }}>
               Ranked
             </span>
           </div>
@@ -165,14 +163,16 @@ export default function LandingPage() {
           <div className="flex items-center space-x-3">
             <Button
               variant="ghost"
-              className="text-gray-300 hover:text-white hover:bg-gray-800"
+              className="text-lg font-medium text-gray-300 hover:text-white hover:bg-gray-800 tracking-tight"
               onClick={() => setLoginOpen(true)}
+              style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}
             >
               Login
             </Button>
             <Button
-              className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0"
+              className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 text-lg font-semibold px-6 py-2 tracking-tight shadow-lg shadow-fuchsia-500/25 hover:shadow-fuchsia-500/40 transition-all duration-300"
               onClick={() => setSignupOpen(true)}
+              style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}
             >
               Sign Up
             </Button>
@@ -183,18 +183,18 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto">
-          <Badge className="mb-6 bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20 hover:bg-fuchsia-500/20 p-4 text-xl">
+          <Badge className="mb-6 bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20 hover:bg-fuchsia-500/20 p-4 text-2xl font-semibold tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
             Live 1v1 Battles
           </Badge>
 
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif', letterSpacing: '-0.02em' }}>
             Compete. Win. Get{" "}
             <span className="bg-gradient-to-r from-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
               Ranked
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-2xl md:text-3xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-medium tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
             Face off against developers worldwide in real-time DSA challenges. Climb the ranks, prove your skills, and
             become the ultimate coding champion.
           </p>
@@ -202,7 +202,8 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 text-lg px-8 py-6 h-auto font-semibold shadow-lg shadow-fuchsia-500/25 hover:shadow-fuchsia-500/40 transition-all duration-300"
+              className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 text-2xl px-10 py-6 h-auto font-bold shadow-lg shadow-fuchsia-500/25 hover:shadow-fuchsia-500/40 transition-all duration-300 tracking-tight"
+              style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}
             >
               Enter Battle Arena
             </Button>
@@ -211,22 +212,22 @@ export default function LandingPage() {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-fuchsia-400 mb-2">
+              <div className="text-4xl font-bold text-fuchsia-400 mb-2 tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
                 {activeBattlers.toLocaleString()}+
               </div>
-              <div className="text-gray-400">Active Battlers</div>
+              <div className="text-lg text-gray-400 font-medium tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>Active Battlers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-400 mb-2">
+              <div className="text-4xl font-bold text-purple-400 mb-2 tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
                 {battlesFought.toLocaleString()}+
               </div>
-              <div className="text-gray-400">Battles Fought</div>
+              <div className="text-lg text-gray-400 font-medium tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>Battles Fought</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-fuchsia-400 mb-2">
+              <div className="text-4xl font-bold text-fuchsia-400 mb-2 tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
                 {liveMatches}/{liveDays}
               </div>
-              <div className="text-gray-400">Live Matches</div>
+              <div className="text-lg text-gray-400 font-medium tracking-tight" style={{ fontFamily: 'Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>Live Matches</div>
             </div>
           </div>
         </div>
@@ -407,146 +408,247 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-800 py-12 bg-[#101010]">
-        <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Ranked. All rights reserved.</p>
-        </div>
-      </footer>
-
       {/* Login Dialog */}
       <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
-        <DialogContent className="bg-[#181022] border-fuchsia-700">
+        <DialogTrigger asChild>
+          <Button variant="ghost" className="hidden" />
+        </DialogTrigger>
+        <DialogContent className="max-w-md mx-auto bg-[#161622] p-6 rounded-lg shadow-lg">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
-              Login
+            <DialogTitle className="text-2xl font-bold text-white">
+              Login to Your Account
             </DialogTitle>
             <DialogDescription className="text-gray-400">
-              Enter your email and password to sign in
+              Enter your credentials to access your dashboard
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleLogin} className="grid gap-4 py-4">
-            <Input
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={loginForm.email}
-              onChange={handleLoginChange}
-              required
-              className="bg-[#232136] border-fuchsia-700 text-white"
-            />
-            <Input
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={loginForm.password}
-              onChange={handleLoginChange}
-              required
-              className="bg-[#232136] border-fuchsia-700 text-white"
-            />
-            <DialogFooter>
+
+          <div className="mt-4">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <Input
+                name="email"
+                type="email"
+                placeholder="Email address"
+                value={loginForm.email}
+                onChange={handleLoginChange}
+                className="bg-[#101010] border border-gray-700 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent rounded-lg py-3 px-4 text-white placeholder-gray-500"
+                required
+              />
+              <Input
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={loginForm.password}
+                onChange={handleLoginChange}
+                className="bg-[#101010] border border-gray-700 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent rounded-lg py-3 px-4 text-white placeholder-gray-500"
+                required
+              />
+
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 font-semibold"
+                className="w-full bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white rounded-lg py-3 px-4 font-semibold transition-all duration-300 flex items-center justify-center"
                 disabled={loading}
               >
-                {loading ? "Logging In..." : "Log In"}
+                {loading ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v16a8 8 0 01-8-8z"
+                      />
+                    </svg>
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
-              <DialogClose asChild>
-                <Button
-                  variant="ghost"
-                  className="text-white hover:text-fuchsia-600 hover:bg-fuchsia-900/10 transition-colors"
-                >
-                  Cancel
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
+            </form>
+          </div>
+
+          <div className="mt-4 text-center">
+            <span className="text-gray-400 text-sm">
+              Don't have an account?{" "}
+              <Button
+                variant="link"
+                className="text-fuchsia-400 hover:text-fuchsia-300"
+                onClick={() => {
+                  setLoginOpen(false)
+                  setSignupOpen(true)
+                }}
+              >
+                Sign up here
+              </Button>
+            </span>
+          </div>
+
+          <DialogClose asChild>
+            <Button
+              variant="ghost"
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </Button>
+          </DialogClose>
         </DialogContent>
       </Dialog>
+
       {/* Signup Dialog */}
       <Dialog open={signupOpen} onOpenChange={setSignupOpen}>
         <DialogTrigger asChild>
+          <Button variant="ghost" className="hidden" />
         </DialogTrigger>
-        <DialogContent className="bg-[#181022] border-fuchsia-700">
+        <DialogContent className="max-w-md mx-auto bg-[#161622] p-6 rounded-lg shadow-lg">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
-              Sign Up
+            <DialogTitle className="text-2xl font-bold text-white">
+              Create a New Account
             </DialogTitle>
             <DialogDescription className="text-gray-400">
-              Create your account to get started
+              Fill in the details below to sign up
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSignup} className="grid gap-4 py-4">
-            <Input
-              name="username"
-              type="text"
-              placeholder="Username"
-              value={signupForm.username}
-              onChange={handleSignupChange}
-              required
-              className="bg-[#232136] border-fuchsia-700 text-white"
-            />
-            <Input
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={signupForm.email}
-              onChange={handleSignupChange}
-              required
-              className="bg-[#232136] border-fuchsia-700 text-white"
-            />
-            <Input
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={signupForm.password}
-              onChange={handleSignupChange}
-              required
-              className="bg-[#232136] border-fuchsia-700 text-white"
-            />
-            <Input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              value={signupForm.confirmPassword}
-              onChange={handleSignupChange}
-              required
-              className="bg-[#232136] border-fuchsia-700 text-white"
-            />
-            <DialogFooter>
+
+          <div className="mt-4">
+            <form onSubmit={handleSignup} className="space-y-4">
+              <Input
+                name="username"
+                type="text"
+                placeholder="Username"
+                value={signupForm.username}
+                onChange={handleSignupChange}
+                className="bg-[#101010] border border-gray-700 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent rounded-lg py-3 px-4 text-white placeholder-gray-500"
+                required
+              />
+              <Input
+                name="email"
+                type="email"
+                placeholder="Email address"
+                value={signupForm.email}
+                onChange={handleSignupChange}
+                className="bg-[#101010] border border-gray-700 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent rounded-lg py-3 px-4 text-white placeholder-gray-500"
+                required
+              />
+              <Input
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={signupForm.password}
+                onChange={handleSignupChange}
+                className="bg-[#101010] border border-gray-700 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent rounded-lg py-3 px-4 text-white placeholder-gray-500"
+                required
+              />
+              <Input
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={signupForm.confirmPassword}
+                onChange={handleSignupChange}
+                className="bg-[#101010] border border-gray-700 focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent rounded-lg py-3 px-4 text-white placeholder-gray-500"
+                required
+              />
+
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 font-semibold"
+                className="w-full bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white rounded-lg py-3 px-4 font-semibold transition-all duration-300 flex items-center justify-center"
                 disabled={loading}
               >
-                {loading ? "Signing Up..." : "Sign Up"}
+                {loading ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v16a8 8 0 01-8-8z"
+                      />
+                    </svg>
+                    Creating account...
+                  </>
+                ) : (
+                  "Sign Up"
+                )}
               </Button>
-              <DialogClose asChild>
-                <Button
-                  variant="ghost"
-                  className="text-white hover:text-fuchsia-600 hover:bg-fuchsia-900/10 transition-colors"
-                >
-                  Cancel
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
+            </form>
+          </div>
+
+          <div className="mt-4 text-center">
+            <span className="text-gray-400 text-sm">
+              Already have an account?{" "}
+              <Button
+                variant="link"
+                className="text-fuchsia-400 hover:text-fuchsia-300"
+                onClick={() => {
+                  setSignupOpen(false)
+                  setLoginOpen(true)
+                }}
+              >
+                Login here
+              </Button>
+            </span>
+          </div>
+
+          <DialogClose asChild>
+            <Button
+              variant="ghost"
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </Button>
+          </DialogClose>
         </DialogContent>
       </Dialog>
-      {/* Style Dialog cross (close) button globally for dialogs on this page */}
-      <style>{`
-        .fixed > button.absolute.top-4.right-4,
-        .fixed > .absolute.top-4.right-4 {
-          color: white !important;
-          transition: color 0.2s;
-        }
-        .fixed > button.absolute.top-4.right-4:hover,
-        .fixed > .absolute.top-4.right-4:hover {
-          color: #101010 !important;
-          background: white !important;
-        }
-      `}</style>
     </div>
   )
 }

@@ -17,10 +17,11 @@ const Toaster = ({
         className: '!text-white',
         success: {
           style: {
-            background: '#A594F9',
+            background: 'linear-gradient(90deg, #a21caf 0%, #7c3aed 100%)', // Tailwind fuchsia-700 to purple-600
             color: '#fff',
+            boxShadow: '0 2px 16px 0 rgba(236, 72, 153, 0.25)',
           },
-          className: '!text-white',
+          className: '!text-white font-semibold',
         },
         error: {
           style: {
@@ -38,8 +39,12 @@ export function showSuccess(message) {
   toast.success(message, {
     duration: 3000,
     position: "bottom-center",
-    style: { background: '#A594F9', color: '#fff' },
-    className: '!text-white',
+    style: {
+      background: 'linear-gradient(90deg, #a21caf 0%, #7c3aed 100%)', // Tailwind fuchsia-700 to purple-600
+      color: '#fff',
+      boxShadow: '0 2px 16px 0 rgba(236, 72, 153, 0.25)',
+    },
+    className: '!text-white font-semibold',
   });
 }
 

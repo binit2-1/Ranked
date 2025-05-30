@@ -17,7 +17,7 @@ export default function App() {
   const isBattle = location.pathname === "/battle";
 
   return (
-    <div className="min-h-screen bg-[#101010] text-white">
+    <div className="min-h-screen bg-[#101010] text-white font-sans" style={{ fontFamily: 'Mori Variable, Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
       <Toaster position="bottom-center" />
       {/* Show Navbar only if authenticated, not on landing or battle page */}
       {!loading && user && !isLanding && !isBattle && (
@@ -26,14 +26,16 @@ export default function App() {
         </header>
       )}
       <main className={!isLanding && !isBattle ? "pt-20" : ""}>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/battle" element={<BattlePage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <div className="font-sans" style={{ fontFamily: 'Mori Variable, Mori, Inter, ui-sans-serif, system-ui, sans-serif' }}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/battle" element={<BattlePage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
       </main>
     </div>
   );

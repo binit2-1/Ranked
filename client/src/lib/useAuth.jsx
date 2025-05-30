@@ -14,10 +14,10 @@ export const AuthProvider = ({ children }) => {
         const {data} = await axios.get('/users/profile', {
           withCredentials: true,
         });
-        console.log(data);
         if(data.success === false) {
-          console.log('Not authenticated');
           setUser(null);
+          // Remove localStorage user if backend says not authenticated
+          localStorage.removeItem('ranked_user');
           return;
         }
         setUser(data.user);
@@ -25,8 +25,11 @@ export const AuthProvider = ({ children }) => {
           matchesPlayed: data.matchesPlayed || 0,
           matchesWon: data.matchesWon || 0,
         });
+        // Store user in localStorage for persistence
+        localStorage.setItem('ranked_user', JSON.stringify(data.user));
       } catch {
         setUser(null);
+        localStorage.removeItem('ranked_user');
       } finally {
         setLoading(false);
       }

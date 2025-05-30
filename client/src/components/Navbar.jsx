@@ -17,10 +17,21 @@ import { LogoutButton } from "./LogoutButton";
 
 export const SlideTabsExample = () => {
   const navigate = useNavigate();
+  React.useEffect(() => {
+    if (window.location.pathname === '/dashboard') {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+    if (window.location.pathname === '/leaderboard') {
+      document.body.style.overflow = '';
+    }
+  }, [window.location.pathname]);
   return (
     <div className="bg-[#101010] py-4 relative">
       <SlideTabs navigate={navigate} />
-      <div className="absolute" style={{ right: '30px', top: '50%', transform: 'translateY(-50%)' }}>
+      <div className="absolute" style={{ right: '50px', top: '50%', transform: 'translateY(-50%)' }}>
         <LogoutButton />
       </div>
     </div>
@@ -31,22 +42,24 @@ const SlideTabs = ({ navigate }) => {
   const [position, setPosition] = useState({ left: 0, width: 0, opacity: 0 });
 
   return (
-    <div className="flex items-center justify-center w-full max-w-[2000px] mx-auto relative">
-      <ul
-        onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
-        className="relative flex justify-center items-center flex-1 rounded-full border-2 border-black bg-white p-1"
-      >
-        <Tab setPosition={setPosition} onClick={() => navigate("/dashboard")}>
-          Dashboard
-        </Tab>
-        <Tab setPosition={setPosition} onClick={() => navigate("/resources")}>
-          Learn
-        </Tab>
-        <Tab setPosition={setPosition} onClick={() => navigate("/leaderboard")}>
-          Leaderboard
-        </Tab>
-        <Cursor position={position} />
-      </ul>
+    <div className="w-full bg-[#101010]">
+      <div className="flex items-center justify-center w-full max-w-[1500px] mx-auto relative">
+        <ul
+          onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
+          className="relative flex justify-center items-center flex-1 rounded-full border border-fuchsia-700 bg-[#101010] p-1"
+        >
+          <Tab setPosition={setPosition} onClick={() => navigate("/dashboard")}>
+            Dashboard
+          </Tab>
+          <Tab setPosition={setPosition} onClick={() => navigate("/resources")}>
+            Learn
+          </Tab>
+          <Tab setPosition={setPosition} onClick={() => navigate("/leaderboard")}>
+            Leaderboard
+          </Tab>
+          <Cursor position={position} />
+        </ul>
+      </div>
     </div>
   );
 };
