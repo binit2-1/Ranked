@@ -1,18 +1,6 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
-// import {
-//   Dialog,
-//   DialogTrigger,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogFooter,
-//   DialogClose,
-// } from "./ui/dialog";
-import { showSuccess } from "./ui/sonner";
-import { useAuth } from "../lib/useAuth";
 import { LogoutButton } from "./LogoutButton";
 
 export const SlideTabsExample = () => {
