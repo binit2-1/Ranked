@@ -26,7 +26,6 @@ function BattlePage({ matchDetails }) {
   const [resultDialogTitle, setResultDialogTitle] = useState("");
   const [resultDialogMessage, setResultDialogMessage] = useState("");
   const [resultDialogElo, setResultDialogElo] = useState(null);
-  const [showExitButton, setShowExitButton] = useState(false);
   const editorRef = useRef(null);
 
   const handleEditorDidMount = (editor) => {
@@ -79,7 +78,6 @@ function BattlePage({ matchDetails }) {
                 setResultDialogMessage(res.data.message);
                 setResultDialogElo(res.data.ratingDifference);
                 setResultDialogOpen(true);
-                setShowExitButton(true);
                 return; // Exit polling on success
               }
               else {
@@ -151,7 +149,7 @@ function BattlePage({ matchDetails }) {
             <span className="font-bold text-2xl">{matchDetails.players[1]}</span>
           </div>
         </div>
-        <Button onClick={handleExit} className={showExitButton ? "" : "hidden " + `bg-slate-950 text-white px-4 py-2 rounded-md`}> Exit Match</Button>
+        <Button onClick={handleExit} className="bg-slate-950 text-white px-4 py-2 rounded-md"> Exit Match</Button>
       </div>
       {/* Split screen */}
       <ResizablePanelGroup direction="horizontal" className="flex-1 flex flex-col md:flex-row gap-4 p-4 overflow-auto">
@@ -199,19 +197,20 @@ function BattlePage({ matchDetails }) {
                   <DialogTrigger asChild>
                     <Button className="bg-slate-900 border border-red-500 text-red-500 cursor-pointer hover:bg-neutral-900 px-6 py-2 text-base font-semibold rounded-md">Resign</Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="bg-[#181022] border-fuchsia-700">
                     <DialogHeader>
-                      <DialogTitle>Are you sure you want to resign?</DialogTitle>
+                      <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-fuchsia-500 to-purple-500 bg-clip-text text-transparent">
+                        Are you sure you want to resign?
+                      </DialogTitle>
                     </DialogHeader>
                     <DialogFooter>
-                      <Button
-                        onClick={handleResign}
-                        className="bg-[#101010] text-white hover:bg-[#232323] border-none shadow-none"
-                      >
+                      <Button onClick={handleResign} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 font-semibold">
                         Yes, Resign
                       </Button>
                       <DialogClose asChild>
-                        <Button className="bg-[#A594F9] text-white hover:bg-[#b3a0e6] border-none shadow-none">Cancel</Button>
+                        <Button variant="ghost" className="text-white hover:text-fuchsia-600 hover:bg-fuchsia-900/10 transition-colors">
+                          Cancel
+                        </Button>
                       </DialogClose>
                     </DialogFooter>
                   </DialogContent>
