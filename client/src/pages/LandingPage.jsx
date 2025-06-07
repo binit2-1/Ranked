@@ -169,7 +169,7 @@ export default function LandingPage() {
     }
   }, []);
 
-  const { user,setUser } = useAuth()
+  const { user, refetch } = useAuth()
   const navigate = useNavigate()
   const [loginOpen, setLoginOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
@@ -234,7 +234,7 @@ export default function LandingPage() {
         showSuccess("Logged in successfully")
         setLoginForm({ email: "", password: "" })
         setLoading(false)
-        setUser(data.user)
+        await refetch()
         setTimeout(() => {
           navigate("/dashboard" , { replace: true })
         }, 1000)
