@@ -31,7 +31,7 @@ export default function App() {
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/battle" element={<BattlePage />} />
+          <Route path="/battle" element={<PrivateRoute><BattlePage /> </PrivateRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
