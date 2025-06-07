@@ -3,10 +3,9 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/useAuth";
 
-export const RevealBento = () => {
+export const RevealBento =  () => {
   const navigate = useNavigate();
-  const { user, userStats, loading } = useAuth();
-
+  const { user, userStats } = useAuth();
 
 
   const matchesLost = Math.max(userStats.matchesPlayed - userStats.matchesWon, 0);
@@ -15,6 +14,7 @@ export const RevealBento = () => {
     : "0.0";
 
   return (
+
     <div className="min-h-screen px-4 py-12 text-zinc-50">
       <motion.div
         initial="initial"

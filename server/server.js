@@ -39,7 +39,7 @@ app.get('/api/leaderboard', async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
 
   try {
-    const result = await getLeaderboardPage(page, limit);
+    const result = await getLeaderboard(page, limit);
     
     res.json({
       success: "true",
