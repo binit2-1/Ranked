@@ -119,3 +119,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Fuchsia color scale for heatmap */
+.react-calendar-heatmap .color-fuchsia-0 {
+  fill: #fdf4ff;
+}
+.react-calendar-heatmap .color-fuchsia-1 {
+  fill: #f5d0fe;
+}
+.react-calendar-heatmap .color-fuchsia-2 {
+  fill: #e879f9;
+}
+.react-calendar-heatmap .color-fuchsia-3 {
+  fill: #c026d3;
+}
+.react-calendar-heatmap .color-fuchsia-4 {
+  fill: #a21caf;
+}
+.react-calendar-heatmap .color-fuchsia-5 {
+  fill: #701a75;
+}
+.react-calendar-heatmap rect:hover {
+  stroke: #f472b6;
+  stroke-width: 1.5px;
+}
