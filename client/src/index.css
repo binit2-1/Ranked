@@ -118,6 +118,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  body, #root, .dashboard-bg {
+    background: #101010 !important;
+  }
 }
 
 /* Fuchsia color scale for heatmap */
@@ -139,7 +142,20 @@
 .react-calendar-heatmap .color-fuchsia-5 {
   fill: #701a75;
 }
+.react-calendar-heatmap .color-fuchsia-future {
+  fill: #44444a;
+}
 .react-calendar-heatmap rect:hover {
   stroke: #f472b6;
   stroke-width: 1.5px;
+}
+.react-calendar-heatmap rect {
+  rx: 0;
+  ry: 0;
+}
+.react-calendar-heatmap text {
+  fill: #fff !important;
+}
+.react-calendar-heatmap {
+  background: transparent !important;
 }
