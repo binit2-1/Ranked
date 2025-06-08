@@ -9,8 +9,8 @@ export default function Dashboard() {
       {/* Main Dashboard Content */}
       <main className="p-6 flex flex-col justify-center min-h-[80vh] gap-0">
         <RevealBento className="pb-0 mb-0" />
-        {/* Restrict Heatmap width for original sizing, no extra margin */}
-        <div className="w-full max-w-3xl ml-80 mt-[-264px]">
+        {/* Restrict Heatmap width for original sizing, add more margin-top for gap */}
+        <div className="w-full max-w-3xl mx-auto mt-[-264px]">
           <Heatmap />
         </div>
         <div className="absolute bottom-82 left-0 right-0 flex"></div>
