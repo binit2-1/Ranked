@@ -68,22 +68,22 @@ export default function Heatmap({ data }) {
           if (value.count >= 2) return "color-fuchsia-2";
           return "color-fuchsia-1";
         }}
-        tooltipDataAttrs={value => {
-          if (!value || !value.date) return null;
+        titleForValue={value => {
+          if (!value || !value.date) return '';
           const todayStr = new Date().toISOString().slice(0, 10);
+          const friendly = new Date(value.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          });
+
           if (value.date > todayStr) {
-            return {
-              'data-tooltip': `Day yet to come (${value.date})`,
-            };
+            return `Day yet to come (${friendly})`;
           }
-          if (value.count) {
-            return {
-              'data-tooltip': `${value.count} matches on ${value.date}`,
-            };
-          }
-          return {
-            'data-tooltip': `No matches on ${value.date}`,
-          };
+
+          const count = value.count || 0;
+          const label = count === 1 ? 'match' : 'matches';
+          return `${count} ${label} on ${friendly}`;
         }}
         showWeekdayLabels={true}
         horizontal={true}
