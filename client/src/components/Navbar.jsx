@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { LogoutButton } from "./LogoutButton";
 
 export const SlideTabsExample = () => {
   const navigate = useNavigate();
   return (
-    <div className="bg-[#101010] py-4 relative">
+    <div className="py-4 relative">
       <SlideTabs navigate={navigate} />
       <div className="absolute" style={{ right: '50px', top: '50%', transform: 'translateY(-50%)' }}>
         <LogoutButton className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white hover:!text-white focus:!text-white border-0 font-semibold px-6 py-2 rounded-md shadow-lg shadow-fuchsia-500/25 hover:shadow-fuchsia-500/40 transition-all duration-300" />
@@ -22,7 +22,7 @@ const SlideTabs = ({ navigate }) => {
     <div className="flex items-center justify-center w-full max-w-[1500px] mx-auto relative">
       <ul
         onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
-        className="relative flex justify-center items-center flex-1 rounded-full border-2 border-fuchsia-700 bg-[#101010] p-1"
+        className="relative flex justify-center items-center flex-1 rounded-full border-2 border-fuchsia-700 bg-[#101010] p-1 overflow-hidden"
       >
         <Tab setPosition={setPosition} onClick={() => navigate("/dashboard")}>
           Dashboard
@@ -62,7 +62,7 @@ const Tab = ({ children, setPosition, onClick }) => {
 };
 
 const Cursor = ({ position }) => (
-  <motion.li
+  <Motion.li
     animate={position}
     className="absolute z-0 h-7 rounded-full bg-gradient-to-r from-fuchsia-600 to-purple-600 md:h-12"
   />
