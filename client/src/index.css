@@ -150,12 +150,38 @@
   stroke-width: 1.5px;
 }
 .react-calendar-heatmap rect {
-  rx: 0;
-  ry: 0;
+  rx: 3px;
+  ry: 3px;
 }
 .react-calendar-heatmap text {
   fill: #fff !important;
 }
 .react-calendar-heatmap {
   background: transparent !important;
+}
+
+/* Custom tooltip for heatmap */
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  background: #181022;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 10px;
+  border-radius: 4px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: opacity 0.2s;
+  z-index: 1000;
+}
+[data-tooltip]:hover::after {
+  opacity: 1;
 }

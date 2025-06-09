@@ -49,7 +49,7 @@ export default function Heatmap({ data }) {
   // If 'data' is not provided, fallback to mock data for development
   const yearMockData = data || generateYearMockData();
   return (
-    <div style={{ width: "100%", maxWidth: 1100, margin: "0 auto", fontFamily: 'inherit', color: '#fff', background: 'transparent', overflow: 'hidden' }}>
+    <div style={{ width: "100%", maxWidth: 1100, margin: "0 auto", fontFamily: 'inherit', color: '#fff', background: 'transparent', overflow: 'visible' }}>
       <CalendarHeatmap
         startDate={startOfYear}
         endDate={endOfYear}
