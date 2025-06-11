@@ -243,11 +243,11 @@ const CompeteButton = ({ navigate }) => {
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
         onClick={() => navigate("/battle")}
-        className="relative group px-12 py-6 bg-gradient-to-r from-purple-500 via-cyan-500 to-fuchsia-500 rounded-2xl font-bold text-2xl text-white shadow-2xl overflow-hidden"
+        className="relative group px-12 py-6 bg-gradient-to-r from-fuchsia-600 via-pink-600 to-purple-600 rounded-2xl font-bold text-2xl text-white shadow-2xl overflow-hidden"
       >
         {/* Animated Background */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-purple-400 via-cyan-500 to-fuchsia-500"
+          className="absolute inset-0 bg-gradient-to-r from-fuchsia-500 via-pink-500 to-purple-500"
           animate={{
             scale: isHovered ? 1.1 : 1,
             opacity: isHovered ? 1 : 0,
