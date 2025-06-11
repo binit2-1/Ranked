@@ -37,7 +37,7 @@ export default function LandingPage() {
       gsap.from(rankedRef.current, {
         y: 40,
         opacity: 0,
-        duration: 1,
+        duration: 2.5,
         delay: 0.2,
         ease: "power3.out"
       });
@@ -50,9 +50,9 @@ export default function LandingPage() {
           {
             opacity: 1,
             scale: 1,
-            filter: 'blur(0px)',
-            duration: 1.1,
-            delay: 0.05,
+            filter: 'blur(0.1px)',
+            duration: 2.2,
+            delay: 1,
             ease: "back.out(1.7)"
           }
         );
@@ -95,7 +95,7 @@ export default function LandingPage() {
     gsap.from(".hero-badge", {
       scale: 0.7,
       opacity: 0,
-      duration: 0.8,
+      duration: 2,
       delay: 0.3,
       ease: "back.out(1.7)"
     });
@@ -106,8 +106,8 @@ export default function LandingPage() {
       {
         y: 0,
         opacity: 1,
-        duration: 0.7,
-        delay: 0.7,
+        duration: 0.9,
+        delay: 0.8,
         ease: "power3.out"
       }
     );
@@ -130,7 +130,7 @@ export default function LandingPage() {
         },
         y: 60,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.6,
         delay: i * 0.1,
         ease: 'power3.out',
       });
@@ -150,7 +150,7 @@ export default function LandingPage() {
       });
     });
 
-    // Animate 'Compete. Win. Get' (movie intro style)
+    // Animation for 'Compete. Win. Get' 
     const mainTitle = document.getElementById('main-title-text');
     if (mainTitle) {
       gsap.fromTo(
@@ -359,10 +359,10 @@ export default function LandingPage() {
   }
 
   // --- Animated stats values (triggered on view) ---
-  const activeBattlers = useCountUpOnView({ end: 10000, duration: 1.2, triggerId: 'stats-section' });
-  const battlesFought = useCountUpOnView({ end: 50000, duration: 1.2, triggerId: 'stats-section' });
-  const liveMatches = useAnimatedNumberOnView(24, 1.2, 10, 30, 'stats-section');
-  const liveDays = useAnimatedNumberOnView(7, 1.2, 1, 9, 'stats-section');
+  const activeBattlers = useCountUpOnView({ end: 10000, duration: 3.4, triggerId: 'stats-section' });
+  const battlesFought = useCountUpOnView({ end: 50000, duration: 3.4, triggerId: 'stats-section' });
+  const liveMatches = useAnimatedNumberOnView(24, 3.4, 10, 30, 'stats-section');
+  const liveDays = useAnimatedNumberOnView(7, 3.4, 1, 9, 'stats-section');
 
   return (
     <div className="min-h-screen bg-[#101010] text-white">
