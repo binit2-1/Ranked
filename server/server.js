@@ -11,7 +11,7 @@ import { loadTestCases } from './helpers/loadTestCases.js'
 import { checkPlayer } from './helpers/redisPlayersManagement.js'
 import { addToMatchmakingQueue, getMatchForPlayer, matchmakerWorker, getMatchDetails, updateMatchDetails } from './helpers/redisMatchMaking.js'
 import { setSubmissionForUser, getSubmissionForUser } from './helpers/redisSubmissionManagement.js'
-import { addNewMatch } from './helpers/db.js'
+import { addNewMatch, getPastYearActivity, updateActivity } from './helpers/db.js'
 import { updateMatchResults } from './helpers/glicko.js'
 import cookieParser from 'cookie-parser'
 import auth from './middleware/auth.js'
@@ -94,6 +94,32 @@ app.put('/judge0/callback', async (req, res) => {
 });
 
 app.use(auth)
+
+app.get('/userActivity', async (req, res) => {
+  const { userId } = req.user;
+
+  if(!userId)
+    return res.json({
+      success: false,
+      message: "Unauthorized"
+    })
+
+  try {
+    const activity = await getPastYearActivity(userId)
+
+    return res.json({
+      success: true,
+      activity: activity,
+    });
+
+  } catch (error) {
+    console.error('Error fetching user activity:', error);
+    res.json({
+      success: false,
+      message: "Failed to fetch user activity"
+    });
+  }
+})
 
 app.post('/submit', async (req, res) => {
   const { problemId , solutionCode, matchId } = req.body;
@@ -275,6 +301,10 @@ app.post('/status-submission', async (req, res) => {
       // update matchData for opponent and set successfulSubmission of user to true
       await updateMatchDetails(req.body.matchId, ratingDifference, req.user.username)
 
+      //updating heatmap activity
+      await updateActivity(req.user.userId);
+      
+
       // send back response
       res.json({
         success: true,
@@ -289,6 +319,8 @@ app.post('/status-submission', async (req, res) => {
   else{
 
     await updateMatchDetails(req.body.matchId, matchDetails.ratingDifference, req.user.username);
+
+    await updateActivity(req.user.userId);
 
     res.json({
       
