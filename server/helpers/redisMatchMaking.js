@@ -6,6 +6,12 @@ const MATCHMAKING_KEY = "matchmakingQueue";
 const MATCH_DATA_PREFIX = "match:";
 const PLAYER_MATCH_PREFIX = "playerMatch:";
 
+const problemSlugs = [
+  'sum-of-even',
+  'roman-to-integer',
+  'palindrome-check'
+];
+
 /**
  * Adds a player to the matchmaking queue using a sorted set based on rating.
  * Prevents duplicates by checking if the player is already present.
@@ -52,7 +58,7 @@ async function findOpponent(playerId, playerRating) {
 
 async function createMatch(player1Id, player2Id) {
   const matchId = randomUUID();
-
+  const randomProblem = problemSlugs[Math.floor(Math.random() * problemSlugs.length)];
   const matchData = {
     matchId,
     players: [player1Id, player2Id],
@@ -60,9 +66,7 @@ async function createMatch(player1Id, player2Id) {
     status: "pending",
     problem: await prisma.problem.findFirst({
         where: {
-          //add logic to select a problem based on criteria
-          // For now, we will just return the first problem
-          slug: 'sum-of-even', // Replace with actual logic to select a problem
+          slug: randomProblem,
         },
         select: {
           id: true,
@@ -79,7 +83,7 @@ async function createMatch(player1Id, player2Id) {
 
   // Save match object
   await redis.set(`${MATCH_DATA_PREFIX}${matchId}`, JSON.stringify(matchData));
-  await redis.expire(`${MATCH_DATA_PREFIX}${matchId}`, (45 * 60) + 10); // 45 minutes + 10 seconds
+  await redis.expire(`${MATCH_DATA_PREFIX}${matchId}`, 45 * 60 + 10); // 45 minutes + 10 seconds
   // Allow each player to lookup their match
   await redis.set(`${PLAYER_MATCH_PREFIX}${player1Id}`, matchId);
   await redis.expire(`${PLAYER_MATCH_PREFIX}${player1Id}`, 10); 

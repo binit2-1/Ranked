@@ -31,6 +31,7 @@ model User {
   matchParticipants            MatchParticipant[]
   matchesWon                   Match[]            
   rating                       Int?
+  activities                   Activity[]
 }
 
 model Match {
@@ -58,4 +59,15 @@ model Problem {
   codeSnippet String           
   createdAt   DateTime @default(now())
   Match       Match[]
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime
+  dateString String
+  count     Int      @default(1)
+
+  @@unique([userId, date]) // Only one entry per user per date
 }
