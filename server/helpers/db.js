@@ -1,4 +1,5 @@
 import prisma from "../exports/prisma.js";
+import { generateAllDatesInYear } from "./misc.js";
 
 export async function createNewUser(username, email, hashedPassword, verificationToken) {
   return await prisma.user.create({
@@ -112,4 +113,48 @@ export async function getMatchesPlayedAndWon(username) {
   };
 }
 
+export async function updateActivity(userId){
+  const date = new Date();
+  const dateString = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  date.setHours(0, 0, 0, 0); // Set time to midnight for consistency
+
+  await prisma.activity.upsert({
+  where: { userId_date: { userId, date } },
+  update: { count: { increment: 1 } },
+  create: { userId, date, dateString, count: 1 },
+});
+}
+
+export async function getPastYearActivity(userId) {
+  const currentDate = new Date();
+  const oneYearBack = new Date();
+  oneYearBack.setFullYear(currentDate.getFullYear() - 1);
+
+  const activity = await prisma.activity.findMany({
+    where: {
+      userId,
+      date: {
+        gte: oneYearBack,
+        lte: currentDate,
+      },
+    },
+    orderBy: {
+      date: 'asc',
+    },
+    select: {
+      dateString: true, // Include the dateString for easier formatting
+      count: true, // Include the count of matches
+    }
+  });
+
+
+  const activityMap = new Map(
+    activity.map((entry) => [entry.dateString, entry.count])
+  );
+
+  return generateAllDatesInYear(oneYearBack, currentDate).map((dateStr) => ({
+    date: dateStr,
+    count: activityMap.get(dateStr) || 0,
+  }));
+}
 
