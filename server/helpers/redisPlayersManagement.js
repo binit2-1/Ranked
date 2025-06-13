@@ -27,7 +27,7 @@ export async function checkPlayer(playerId) {
 export async function updatePlayer(playerId, playerData) {
     const playerKey = `${PLAYERS_KEY}${playerId}`;
     const updatedPlayer = await redis.hset(playerKey, playerData);
-    console.log("Updated player in redis: ", updatedPlayer);
+    // console.log("Updated player in redis: ", updatedPlayer);
     return updatedPlayer;
 }
 

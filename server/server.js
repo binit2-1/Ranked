@@ -61,7 +61,7 @@ app.get('/api/leaderboard', async (req, res) => {
 });
 
 app.get('/leaderboard' , async (req, res) => {
-  console.log('Fetching leaderboard with range:', req.params.range);
+  // console.log('Fetching leaderboard with range:', req.params.range);
   const range = req.params.range ? parseInt(req.params.range) : 10; // Default to top 10 if no range is provided
   const leaderboard = await getLeaderboard(range);
 
@@ -333,8 +333,8 @@ app.post('/status-submission', async (req, res) => {
 })
 
 
-app.listen(port, async () => {
-  console.log(`Server listening on port: ${port}`)
+app.listen(process.env.PORT || port, async () => {
+  console.log(`Server listening on port: ${process.env.PORT || port}`)
   matchmakerWorker() 
 })
 
