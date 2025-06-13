@@ -47,7 +47,7 @@ async function findOpponent(playerId, playerRating) {
 
   // Get potential opponents (excluding the player himself)
   const candidates = await redis.zrangebyscore(MATCHMAKING_KEY, minScore, maxScore);
-  console.log(`Potential opponents for player ${playerId}:`, candidates);
+  // console.log(`Potential opponents for player ${playerId}:`, candidates);
   for (const opponentId of candidates) {
     if (opponentId !== playerId) {
       return opponentId;
@@ -104,7 +104,7 @@ export async function matchmakerWorker() {
     const TopPlayer = await redis.zrange(MATCHMAKING_KEY, 0, 0, "WITHSCORES");
     if (TopPlayer.length === 0 || TopPlayer.length === 1) {
       // No players in the queue
-      console.log("No players in the matchmaking queue");
+      // console.log("No players in the matchmaking queue");
       await new Promise((res) => setTimeout(res, 7000));
       continue;
     }
