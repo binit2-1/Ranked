@@ -1,10 +1,15 @@
 import fs from 'fs'
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 export function loadTestCases(problemSlug) {
-  const dir = `${process.env.PATH_TO_PROBLEMS}/${problemSlug}/testcases`;
+  const dir = path.join(__dirname, '..', 'problems', problemSlug, 'testcases');
   const inputs = fs.readdirSync(`${dir}/inputs`);
 
   return inputs.map((file) => {
