@@ -43,19 +43,29 @@ export const RevealBento = () => {
 
 const ProfileHeader = ({ user }) => {
   const getRankColor = (rank) => {
+    if(rank == null || rank == undefined) return "from-gray-400 to-gray-600"
     if (rank <= 10) return "from-yellow-400 to-orange-500"
     if (rank <= 50) return "from-purple-400 to-pink-500"
     if (rank <= 100) return "from-blue-400 to-cyan-500"
     return "from-gray-400 to-gray-600"
   }
 
+  const getEloColor = (elo) => {
+    if (elo == null || elo == undefined) return "from-gray-400 to-gray-600"
+    if (elo >= 2000) return "from-yellow-400 to-orange-500"
+    if (elo >= 1500) return "from-purple-400 to-pink-500"
+    if (elo >= 1000) return "from-blue-400 to-cyan-500"
+    return "from-gray-400 to-gray-600"
+  }
+
   const getRankIcon = (rank) => {
+    if( rank == null || rank == undefined) return Target
     if (rank <= 10) return Crown
     if (rank <= 50) return Trophy
     if (rank <= 100) return Award
     return Target
   }
-
+  console.log(user)
   const RankIcon = getRankIcon(user.rank)
 
   return (
@@ -83,12 +93,12 @@ const ProfileHeader = ({ user }) => {
           initial: { opacity: 0, scale: 0.8 },
           animate: { opacity: 1, scale: 1 },
         }}
-        className="text-6xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent mb-4"
+        className="pb-4 text-6xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent mb-4"
       >
         {user.username}
       </motion.h1>
 
-      <div className="flex justify-center items-center gap-8 flex-wrap">
+      <div className="flex justify-center items-center gap-8 flex-wrap mt-5">
         <motion.div
           variants={{
             initial: { opacity: 0, x: -30 },
@@ -96,7 +106,7 @@ const ProfileHeader = ({ user }) => {
           }}
           className={`flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r ${getRankColor(user.rank)} text-black font-bold text-lg shadow-lg`}
         >
-          <Crown className="w-5 h-5" />
+          <Crown className={`w-5 h-5`} />
           <span>Rank #{user.rank || "Unranked"}</span>
         </motion.div>
 
@@ -105,7 +115,7 @@ const ProfileHeader = ({ user }) => {
             initial: { opacity: 0, x: 30 },
             animate: { opacity: 1, x: 0 },
           }}
-          className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold text-lg shadow-lg"
+          className={`${getEloColor(user.elo)} flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold text-lg shadow-lg`}
         >
           <Zap className="w-5 h-5" />
           <span>{user.elo !== null ? Math.round(user.elo) : "-"} Elo</span>

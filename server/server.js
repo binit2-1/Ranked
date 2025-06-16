@@ -6,6 +6,8 @@ import userRouter from './routes/userRouter.js'
 dotenv.config()
 import prisma from './exports/prisma.js'
 import fs from 'fs'
+import path from 'path';
+import { fileURLToPath } from 'url';
 import axios from 'axios'
 import { loadTestCases } from './helpers/loadTestCases.js'
 import { checkPlayer } from './helpers/redisPlayersManagement.js'
@@ -16,6 +18,10 @@ import { updateMatchResults } from './helpers/glicko.js'
 import cookieParser from 'cookie-parser'
 import auth from './middleware/auth.js'
 import { getLeaderboard } from './helpers/leaderboard.js'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express()
 
 app.use(cors({
@@ -158,7 +164,8 @@ app.post('/submit', async (req, res) => {
       message: "Problem does not exists"
     })
   
-  let fullCode = fs.readFileSync(`${process.env.PATH_TO_PROBLEMS}/${problem.slug}/boilerplateFullCode.txt`, 'utf8').replace('##USER_CODE##', solutionCode);
+  const PathToProblem = path.join(__dirname, process.env.PATH_TO_PROBLEMS, problem.slug, 'boilerplateFullCode.txt');
+  let fullCode = fs.readFileSync(PathToProblem, 'utf8').replace('##USER_CODE##', solutionCode);
 
   //console.log('Full code:', fullCode);
 

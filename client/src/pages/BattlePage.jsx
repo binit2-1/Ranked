@@ -26,6 +26,7 @@ function BattlePage({ matchDetails }) {
   const [resultDialogTitle, setResultDialogTitle] = useState("");
   const [resultDialogMessage, setResultDialogMessage] = useState("");
   const [resultDialogElo, setResultDialogElo] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const editorRef = useRef(null);
 
   const handleEditorDidMount = (editor) => {
@@ -53,7 +54,8 @@ function BattlePage({ matchDetails }) {
   }, [matchDetails.createdAt, timerActive]);
 
   const handleSubmit = async () => {
-
+    if (submitLoading) return; // Prevent multiple submissions
+    setSubmitLoading(true);
     try {
       const response = await axios.post('/submit', {
         problemId: matchDetails.problem.id,
@@ -109,8 +111,11 @@ function BattlePage({ matchDetails }) {
         setResultDialogElo(null);
         setResultDialogOpen(true);
       }
+
+      setSubmitLoading(false);
     } catch (error) {
         console.error("Error submitting solution:", error);
+        setSubmitLoading(false);
     }
   };
 
@@ -192,7 +197,7 @@ function BattlePage({ matchDetails }) {
                 
               </div>
               <div className="flex gap-2">
-                <Button onClick={handleSubmit} className="bg-fuchsia-600 text-white hover:bg-fuchsia-700 px-6 py-2 text-base font-semibold rounded-md">Submit</Button>
+                <Button onClick={handleSubmit} disabled={submitLoading} className={submitLoading ? "bg-fuchsia-800" : "bg-fuchsia-600" + "text-white hover:bg-fuchsia-700 px-6 py-2 text-base font-semibold rounded-md"}>{submitLoading ? "Submitting..." : "Submit"}</Button>
                 <Dialog open={resignDialogOpen} onOpenChange={setResignDialogOpen}>
                   <DialogTrigger asChild>
                     <Button className="bg-slate-900 border border-red-500 text-red-500 cursor-pointer hover:bg-neutral-900 px-6 py-2 text-base font-semibold rounded-md">Resign</Button>
@@ -204,7 +209,7 @@ function BattlePage({ matchDetails }) {
                       </DialogTitle>
                     </DialogHeader>
                     <DialogFooter>
-                      <Button onClick={handleResign} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 font-semibold">
+                      <Button onClick={handleResign} className="bg-gradient-to-600 to-purple-600 hover:from-fuchsia-700 hover:to-purple-700 text-white border-0 font-semibold">
                         Yes, Resign
                       </Button>
                       <DialogClose asChild>
