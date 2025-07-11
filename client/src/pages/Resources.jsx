@@ -12,7 +12,7 @@ const cardData = [
 		onButtonClick: () => window.open("https://www.learncpp.com/", "_blank"),
 	},
 	{
-		image: "/src/images/tuf.png",
+		image: "/images/tuf.png",
 		title: "Striver's A2Z DSA Course",
 		description:
 			"Comprehensive DSA course and sheet by Striver (takeUforward). Perfect for mastering Data Structures & Algorithms.",
@@ -27,14 +27,14 @@ const cardData = [
 		onButtonClick: () => window.open("https://leetcode.com/study-plan/", "_blank"),
 	},
 	{
-		image: "/src/images/Harvard_CS50x-2.png",
+		image: "/images/Harvard_CS50x-2.png",
 		title: "CS50 by Harvard",
 		description: "Learn computer science fundamentals, logic, and problem solving with real-world projects.",
 		buttonText: "Start CS50",
 		onButtonClick: () => window.open("https://cs50.harvard.edu/x/", "_blank"),
 	},
 	{
-		image: "/src/images/fccs.png",
+		image: "/images/fccs.png",
 		title: "freeCodeCamp",
 		description: "Learn DSA, algorithms, and full-stack development with interactive tutorials and hands-on coding challenges.",
 		buttonText: "Start Learning",
@@ -48,14 +48,14 @@ const cardData = [
 		onButtonClick: () => window.open("https://practice.geeksforgeeks.org/explore", "_blank"),
 	},
 	{
-		image: "/src/images/neetcodee.jpg",
+		image: "/images/neetcodee.jpg",
 		title: "Neetcode DSA Roadmap",
 		description: "Master DSA through structured problem lists and easy-to-follow video tutorials.",
 		buttonText: "Explore Neetcode",
 		onButtonClick: () => window.open("https://neetcode.io/", "_blank"),
 	},
 	{
-		image: "/src/images/tuf.png",
+		image: "/images/tuf.png",
 		title: "takeUforward YouTube Channel",
 		description: "DSA, coding interviews, and system design explained by Striver. Video tutorials, live sessions, and more!",
 		buttonText: "Watch on YouTube",
