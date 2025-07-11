@@ -18,7 +18,7 @@ def threeSum(nums):
                 right -= 1
             else:
                 result.append([nums[i], nums[left], nums[right]])
-                # Skip duplicates for left and right
+                # Skip duplicates
                 while left < right and nums[left] == nums[left+1]:
                     left += 1
                 while left < right and nums[right] == nums[right-1]:
@@ -27,11 +27,8 @@ def threeSum(nums):
                 right -= 1
     return result
 
-# Read input and run tests (for local testing)
 if __name__ == "__main__":
-    import sys
-    input = sys.stdin.read().split()
-    n = int(input[0])
-    nums = list(map(int, input[1:n+1]))
+    n = int(input())
+    nums = list(map(int, input().split()))
     result = threeSum(nums)
     print(str(result).replace(" ", ""))
